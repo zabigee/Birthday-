@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Happy Birthday, Noor!</title>
+<style>
+  :root {
+    --bg1: #fff6f8;
+    --bg2: #fde8ef;
+    --card: #ffffff;
+    --ink: #2b1922;
+    --muted: #6f4c5d;
+    --accent: #e11d48;
+    --accent2: #fb7185;
+    --gold: #f59e0b;
+    --border: #f8d7e2;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background: linear-gradient(155deg, var(--bg1), var(--bg2));
+    color: var(--ink);
+    min-height: 100vh;
+    padding: 20px;
+  }
+  .topbar {
+    max-width: 920px;
+    margin: 0 auto 20px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+  }
+  .btn {
+    border: none;
+    border-radius: 999px;
+    padding: 10px 18px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    background: var(--accent);
+    color: #fff;
+    transition: transform .15s ease, opacity .15s ease;
+  }
+  .btn:hover { transform: translateY(-1px); opacity: .95; }
+  .btn.secondary {
+    background: #fff;
+    color: var(--ink);
+    border: 1px solid var(--border);
+  }
+  .container {
+    max-width: 920px;
+    margin: 0 auto;
+    display: grid;
+    gap: 20px;
+  }
+  .panel {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 24px;
+    padding: 24px;
+    box-shadow: 0 12px 30px rgba(225, 29, 72, 0.08);
+  }
+  .hero { text-align: center; }
+  .hero h1 { font-size: clamp(28px, 5vw, 44px); color: var(--accent); margin-bottom: 8px; }
+  .hero p { color: var(--muted); font-size: 16px; }
+  .cake-wrap { text-align: center; margin: 16px 0; }
+  .cake {
+    display: inline-block;
+    position: relative;
+    cursor: pointer;
+    user-select: none;
+    padding-top: 28px;
+  }
+  .candles { font-size: 28px; letter-spacing: 6px; transition: opacity .3s ease; }
+  .candles.blown { opacity: .25; filter: grayscale(1); }
+  .cake-body { font-size: 76px; line-height: 1; }
+  .wish-box {
+    margin-top: 12px;
+    font-weight: 600;
+    color: var(--accent);
+    min-height: 24px;
+  }
+  .envelope {
+    background: #fff9fb;
+    border: 2px dashed var(--accent2);
+    border-radius: 18px;
+    padding: 20px;
+    cursor: pointer;
+    text-align: center;
+  }
+  .letter {
+    display: none;
+    text-align: left;
+    margin-top: 14px;
+    line-height: 1.7;
+    white-space: pre-line;
+    color: var(--ink);
+  }
+  .letter.open { display: block; }
+  .cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 14px;
+    margin-top: 12px;
+  }
+  .flip-card {
+    background: #fff5f8;
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 18px;
+    min-height: 130px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    cursor: pointer;
+  }
+  .gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 14px;
+    margin-top: 12px;
+  }
+  .photo-card {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 10px;
+    text-align: center;
+  }
+  .photo-card img {
+    width: 100%;
+    height: 170px;
+    object-fit: cover;
+    border-radius: 10px;
+    background: #fde8ef;
+  }
+  .photo-card p { margin-top: 8px; font-size: 13px; color: var(--muted); }
+  .customizer { display: none; }
+  .customizer.active { display: block; }
+  .field { margin-bottom: 14px; }
+  .field label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 6px; }
+  .field input, .field textarea {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #e5b8c8;
+    border-radius: 12px;
+    font-family: inherit;
+    font-size: 14px;
+  }
+  .gear {
+    position: fixed;
+    right: 16px;
+    bottom: 16px;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: 1px solid var(--border);
+    background: #fff;
+    font-size: 20px;
+    cursor: pointer;
+    box-shadow: 0 6px 16px rgba(0,0,0,.12);
+    display: none;
+  }
+  .gear.visible { display: block; }
+</style>
+</head>
+<body>
+  <div class="topbar" id="topbar">
+    <button class="btn secondary" id="melodyBtn">Play Melody</button>
+    <button class="btn" id="toggleEditBtn">Customize Gift</button>
+  </div>
+
+  <div class="container">
+    <section class="panel customizer" id="customizerPanel">
+      <h2>Customize Your Birthday Gift</h2>
+      <div class="field">
+        <label>Her Name / Nickname</label>
+        <input type="text" id="herNameInput" value="Noor (Bagoo)" />
+      </div>
+      <div class="field">
+        <label>Your Name</label>
+        <input type="text" id="myNameInput" value="Abdullah" />
+      </div>
+      <div class="field">
+        <label>Secret Cake Wish</label>
+        <input type="text" id="wishInput" value="Wishing you endless smiles, peace, and every dream coming true!" />
+      </div>
+      <div class="field">
+        <label>Love Letter</label>
+        <textarea id="letterInput" rows="5">Happy Birthday, Bagoo! Every day with you feels brighter and warmer. Thank you for being my favorite person, my calm, and my happiest memory. Here's to many more birthdays together.</textarea>
+      </div>
+      <div class="field">
+        <label>Add Photos (Embedded into this page)</label>
+        <input type="file" id="photoInput" accept="image/*" multiple />
+      </div>
+      <button class="btn" id="previewBtn">Done • Preview Gift Mode</button>
+    </section>
+
+    <section class="panel hero">
+      <h1 id="headline">Happy Birthday, Noor (Bagoo)!</h1>
+      <p id="subline">Made with love by <span id="senderName">Abdullah</span></p>
+      <div class="cake-wrap">
+        <div class="cake" id="cakeBtn" title="Tap to blow out the candles">
+          <div class="candles" id="candles">🕯️🕯️🕯️</div>
+          <div class="cake-body">🎂</div>
+        </div>
+        <div class="wish-box" id="wishBox">Tap the candles to blow them out &amp; reveal your wish</div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="envelope" id="envelopeBtn">
+        <strong>💌 Tap to Open Birthday Letter</strong>
+        <div class="letter" id="letterContent"></div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h3>Little Reasons Why You're Special</h3>
+      <div class="cards-grid" id="reasonsGrid"></div>
+    </section>
+
+    <section class="panel">
+      <h3>Favorite Memories</h3>
+      <div class="gallery" id="galleryGrid"></div>
+    </section>
+  </div>
+
+  <button class="gear" id="gearBtn" title="Edit Gift">⚙️</button>
+
+  <script>
+    const state = {
+      herName: "Noor (Bagoo)",
+      myName: "Abdullah",
+      wish: "Wishing you endless smiles, peace, and every dream coming true!",
+      letter: "Happy Birthday, Bagoo! Every day with you feels brighter and warmer. Thank you for being my favorite person, my calm, and my happiest memory. Here's to many more birthdays together.",
+      reasons: [
+        { front: "Reason #1", back: "Your smile that turns any ordinary day around." },
+        { front: "Reason #2", back: "The warmth and kindness you bring everywhere." },
+        { front: "Reason #3", back: "Every late chat and shared laugh we have." }
+      ],
+      photos: [
+        { src: "", caption: "Add your favorite photo" },
+        { src: "", caption: "Another special moment" }
+      ],
+      blown: false,
+      giftMode: false
+    };
+
+    const $ = (id) => document.getElementById(id);
+
+    function render() {
+      $("headline").textContent = `Happy Birthday, ${state.herName}!`;
+      $("senderName").textContent = state.myName;
+      $("letterContent").textContent = state.letter;
+      $("candles").classList.toggle("blown", state.blown);
+      $("wishBox").textContent = state.blown
+        ? state.wish
+        : "Tap the candles to blow them out & reveal your wish";
+
+      $("reasonsGrid").innerHTML = "";
+      state.reasons.forEach((r) => {
+        const card = document.createElement("div");
+        card.className = "flip-card";
+        card.dataset.flipped = "false";
+        card.innerHTML = `<strong>${r.front}</strong><p style="margin-top:8px;font-size:13px;color:#6f4c5d;">Tap to reveal</p>`;
+        card.onclick = () => {
+          const isFlipped = card.dataset.flipped === "true";
+          card.dataset.flipped = String(!isFlipped);
+          card.innerHTML = isFlipped
+            ? `<strong>${r.front}</strong><p style="margin-top:8px;font-size:13px;color:#6f4c5d;">Tap to reveal</p>`
+            : `<p style="font-size:14px;font-weight:600;color:#2b1922;">${r.back}</p>`;
+        };
+        $("reasonsGrid").appendChild(card);
+      });
+
+      $("galleryGrid").innerHTML = "";
+      state.photos.forEach((p) => {
+        const item = document.createElement("div");
+        item.className = "photo-card";
+        const imgHtml = p.src
+          ? `<img src="${p.src}" alt="${p.caption}" />`
+          : `<div style="height:170px;border-radius:10px;background:#fde8ef;display:flex;align-items:center;justify-content:center;color:#9d4edd;font-size:32px;">📸</div>`;
+        item.innerHTML = `${imgHtml}<p>${p.caption}</p>`;
+        $("galleryGrid").appendChild(item);
+      });
+
+      $("topbar").style.display = state.giftMode ? "none" : "flex";
+      $("gearBtn").classList.toggle("visible", state.giftMode);
+    }
+
+    $("cakeBtn").onclick = () => {
+      state.blown = !state.blown;
+      render();
+    };
+
+    $("envelopeBtn").onclick = () => {
+      $("letterContent").classList.toggle("open");
+    };
+
+    $("toggleEditBtn").onclick = () => {
+      $("customizerPanel").classList.toggle("active");
+    };
+
+    $("gearBtn").onclick = () => {
+      state.giftMode = false;
+      $("customizerPanel").classList.add("active");
+      render();
+    };
+
+    $("previewBtn").onclick = () => {
+      state.herName = $("herNameInput").value.trim() || "Noor";
+      state.myName = $("myNameInput").value.trim() || "Abdullah";
+      state.wish = $("wishInput").value.trim() || state.wish;
+      state.letter = $("letterInput").value.trim() || state.letter;
+      state.giftMode = true;
+      $("customizerPanel").classList.remove("active");
+      render();
+    };
+
+    $("photoInput").onchange = (e) => {
+      const files = Array.from(e.target.files || []);
+      if (!files.length) return;
+      state.photos = [];
+      files.forEach((file, idx) => {
+        const reader = new FileReader();
+        reader.onload = () => {
+          state.photos.push({ src: reader.result, caption: `Memory #${idx + 1}` });
+          render();
+        };
+        reader.readAsDataURL(file);
+      });
+    };
+
+    $("melodyBtn").onclick = () => {
+      const AudioCtx = window.AudioContext || window.webkitAudioContext;
+      if (!AudioCtx) return;
+      const ctx = new AudioCtx();
+      const notes = [
+        [264, 0.25], [264, 0.25], [297, 0.5], [264, 0.5], [352, 0.5], [330, 1.0],
+        [264, 0.25], [264, 0.25], [297, 0.5], [264, 0.5], [396, 0.5], [352, 1.0]
+      ];
+      let t = ctx.currentTime;
+      notes.forEach(([freq, dur]) => {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = "sine";
+        osc.frequency.setValueAtTime(freq, t);
+        gain.gain.setValueAtTime(0.08, t);
+        gain.gain.exponentialRampToValueAtTime(0.001, t + dur);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start(t);
+        osc.stop(t + dur);
+        t += dur;
+      });
+    };
+
+    render();
+  </script>
+</body>
+</html>
